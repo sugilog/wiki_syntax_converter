@@ -3,11 +3,13 @@
 require 'yaml'
 require 'optparse'
 
+SYNTAXFILE_NAME = 'syntaxes.yaml'
+
 @from = 'trac'
 @to   = 'hatena'
 
 OptionParser.new do |opt|
-  opt.program_name = 'trac - hatena converter'
+  opt.program_name = 'wiki syntax converter (trac - hatena)'
   opt.version = '0.0.1'
 
   opt.banner = <<-BANNER
@@ -43,20 +45,20 @@ You need to set argument for option
   end
 end
 
-def grammers
-  _grammers = YAML.load_file('grammers.yaml')
+def syntaxes
+  _syntaxes = YAML.load_file(SYNTAXFILE_NAME)
 
-  _grammers.each do |grammer|
-    grammer[@from] = Regexp.escape(grammer[@from]).gsub(Regexp.escape('\1'), '(.*)')
+  _syntaxes.each do |syntax|
+    syntax[@from] = Regexp.escape(syntax[@from]).gsub(Regexp.escape('\1'), '(.*)')
   end
 end
 
 def convert(str)
-  _grammers = grammers
+  _syntaxes = syntaxes
 
-  _grammers.each do |grammer|
-    regexp = grammer[@from]
-    convert_str = grammer[@to]
+  _syntaxes.each do |syntax|
+    regexp = syntax[@from]
+    convert_str = syntax[@to]
 
     if str =~ /^#{regexp}\n$/
       return str.gsub(/#{regexp}/, convert_str)
