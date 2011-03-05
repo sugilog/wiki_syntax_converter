@@ -1,0 +1,15 @@
+= hoge =
+
+text
+
+== fuga ==
+ * list1
+  * list2
+
+{{{
+plain
+}}}
+
+{{{#!ruby
+puts 'Hello, World!'
+}}}
